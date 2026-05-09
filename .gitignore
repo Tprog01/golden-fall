@@ -15,3 +15,6 @@ yarn-error.log*
 
 backend/server/images/uploads/*
 !backend/server/images/uploads/.gitkeep
+!backend/server/images/uploads/default_avatar.png
+!backend/server/images/uploads/1777038022644-885676557.gif
+
