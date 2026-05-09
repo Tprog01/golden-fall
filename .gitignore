@@ -20,4 +20,5 @@ backend/server/images/uploads/*
 
 
 *.sql
-ca.pem
+*.pem
+*.session

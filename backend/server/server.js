@@ -54,7 +54,7 @@ app.use(express.static(rootPath));
 app.use("/uploads", express.static("images/uploads"));
 
 const JWT_SECRET = process.env.JWT_SECRET;
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 10000;
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(rootPath, "index", "index.html"));
