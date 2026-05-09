@@ -351,7 +351,6 @@
           gap: 0;
         }
 
-        
         .sidebar a {
           font-size: 14px;
           display: flex;
@@ -449,10 +448,11 @@
         <button class="back-button" onclick="history.back()">← Назад</button>
       </main>
     </div>
-    <script src="../js/config.js"></script>
-    <script src="../js/profileCurcle.js"></script>
+    <script type="module" src="../js/profileCurcle.js"></script>
     <script src="../js/modalWindow.js"></script>
-    <script>
+    <script type="module">
+      import { API_URL } from "../js/config.js";
+
       document.addEventListener("DOMContentLoaded", async () => {
         try {
           const token = localStorage.getItem("token");
@@ -473,7 +473,7 @@
             return;
           }
 
-          const response = await fetch("/api/getFavorite", {
+          const response = await fetch(`${API_URL}/api/getFavorite`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -535,7 +535,7 @@
             return;
           }
           const productId = e.target.dataset.id;
-          const response = await fetch("/api/addToCart", {
+          const response = await fetch(`${API_URL}/api/addToCart`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -580,7 +580,7 @@
 
         const productId = btn.dataset.id;
         try {
-          const response = await fetch("/api/setFavorite", {
+          const response = await fetch(`${API_URL}/api/setFavorite`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

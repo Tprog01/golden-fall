@@ -289,17 +289,18 @@
         </div>
       </main>
     </div>
-    <script src="../js/config.js"></script>
-    <script src="../js/profileCurcle.js"></script>
+    <script type="module" src="../js/profileCurcle.js"></script>
     <script src="../js/modalWindow.js"></script>
-    <script>
+    <script type="module">
+      import { API_URL } from "../js/config.js";
+
       document.addEventListener("DOMContentLoaded", async () => {
         const token = localStorage.getItem("token");
         const orderNumber = document.getElementById("order-number");
         const orderDate = document.getElementById("order-date");
         const totalPrice = document.getElementById("total-price");
 
-        const response = await fetch("/api/getOrderData", {
+        const response = await fetch(`${API_URL}/api/getOrderData`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

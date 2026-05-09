@@ -1,3 +1,5 @@
+import { API_URL } from "../js/config.js";
+
 const regForm = document.getElementById("auth-form");
 
 if (regForm) {

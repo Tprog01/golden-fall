@@ -3,21 +3,6 @@
     {
       "mysqlOptions": {
         "authProtocol": "default",
-        "enableSsl": "Disabled"
-      },
-      "ssh": "Disabled",
-      "previewLimit": 50,
-      "server": "localhost",
-      "port": 3306,
-      "driver": "MySQL",
-      "name": "MyDb",
-      "database": "golden_fall",
-      "username": "root",
-      "password": "R16012007g!RUSLAN!^)!"
-    },
-    {
-      "mysqlOptions": {
-        "authProtocol": "default",
         "enableSsl": "Enabled",
         "ssl": {
           "ca": "C:\\Мои проекты\\visualStudioCode\\Диплом\\ca.pem"
@@ -32,6 +17,21 @@
       "name": "golden_fall",
       "password": "AVNS_Xf_zWUdetjMKcobXSIC",
       "username": "avnadmin"
+    },
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "ssh": "Disabled",
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "MyDb",
+      "database": "golden_fall",
+      "username": "root",
+      "password": "R16012007g!RUSLAN!^)!"
     }
   ]
 }

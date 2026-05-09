@@ -40,10 +40,11 @@
         </div>
       </main>
     </div>
-    <script src="../js/config.js"></script>
-    <script src="../js/profileCurcle.js"></script>
+    <script type="module" src="../js/profileCurcle.js"></script>
     <script src="../js/modalWindow.js"></script>
-    <script>
+    <script type="module">
+      import { API_URL } from "../js/config.js";
+
       let cartData = [];
       function calculateSum(result) {
         let total = 0;
@@ -94,7 +95,7 @@
         </div>`;
             return;
           }
-          const response = await fetch("/api/loadCart", {
+          const response = await fetch(`${API_URL}/api/loadCart`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -187,7 +188,7 @@
 
         try {
           if (token) {
-            const response = await fetch("/api/delete", {
+            const response = await fetch(`${API_URL}/api/delete`, {
               method: "DELETE",
               headers: {
                 authorization: `Bearer ${token}`,
@@ -301,7 +302,7 @@
         const orderButton = document.querySelector(".order-btn");
         try {
           if (token) {
-            const response = await fetch("/api/changeQuantity", {
+            const response = await fetch(`${API_URL}/api/changeQuantity`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -339,7 +340,7 @@
               console.error("Токен отсутствует:");
               return;
             }
-            const response = await fetch("/api/fillOrder", {
+            const response = await fetch(`${API_URL}/api/fillOrder`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -355,6 +356,11 @@
           }
         }
       });
+
+      window.deleteItem = deleteItem;
+      window.plusItem = plusItem;
+      window.minusItem = minusItem;
+      window.updateQuantityManual = updateQuantityManual;
     </script>
   </body>
 </html>

@@ -1,3 +1,5 @@
+import { API_URL } from "../js/config.js";
+
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const urlParams = new URLSearchParams(window.location.search);
@@ -67,7 +69,7 @@ document.addEventListener("click", async (e) => {
       return;
     }
     const productId = e.target.dataset.id;
-    const response = await fetch("/api/addToCart", {
+    const response = await fetch(`${API_URL}/api/addToCart`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -110,7 +112,7 @@ document.addEventListener("click", async (e) => {
 
   const productId = btn.dataset.id;
   try {
-    const response = await fetch("/api/setFavorite", {
+    const response = await fetch(`${API_URL}/api/setFavorite`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -129,7 +131,7 @@ document.addEventListener("click", async (e) => {
       }
 
       btn.classList.add("pulse");
-      
+
       setTimeout(() => {
         btn.classList.remove("pulse");
       }, 400);

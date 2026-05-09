@@ -1,3 +1,5 @@
+import { API_URL } from "./config.js";
+
 document.addEventListener("DOMContentLoaded", async function () {
   const profileLink = document.getElementById("profile-circle");
   const profileImg = profileLink.querySelector("img");
@@ -13,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         return;
       }
       if (isLoggedIn === "true") {
-        const response = await fetch("/api/avatar", {
+        const response = await fetch(`${API_URL}/api/avatar`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

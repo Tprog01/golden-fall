@@ -97,9 +97,11 @@
         </form>
       </main>
     </div>
-    <script src="../js/config.js"></script>
+
     <script src="../js/modalWindow.js"></script>
-    <script>
+    <script type="module">
+      import { API_URL } from "../js/config.js";
+
       document.addEventListener("DOMContentLoaded", async function () {
         const profileLink = document.getElementById("profile-circle");
         const profileImg = profileLink.querySelector("img");
@@ -114,7 +116,7 @@
 
         try {
           if (isLoggedIn === "true") {
-            const response = await fetch("/api/profile", {
+            const response = await fetch(`${API_URL}/api/profile`, {
               method: "GET",
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -192,7 +194,7 @@
 
           const token = localStorage.getItem("token");
           if (hasChanged) {
-            const response = await fetch("/api/saveData", {
+            const response = await fetch(`${API_URL}/api/saveData`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -258,7 +260,7 @@
         const token = localStorage.getItem("token");
 
         try {
-          const response = await fetch("/api/photoLoad", {
+          const response = await fetch(`${API_URL}/api/photoLoad`, {
             method: "POST",
             headers: {
               Authorization: `Bearer ${token}`,

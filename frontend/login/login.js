@@ -1,3 +1,5 @@
+import { API_URL } from "../js/config.js";
+
 const logForm = document.getElementById("auth-form");
 
 if (logForm) {
