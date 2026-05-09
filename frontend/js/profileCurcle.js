@@ -21,14 +21,14 @@ document.addEventListener("DOMContentLoaded", async function () {
             Authorization: `Bearer ${token}`,
           },
         });
-        const userData = await response.json();
+        const userData = await response.json();        
 
-        profileImg.src = `${API_URL}/uploads/` + userData.photo;
+        profileImg.src = userData.photo;
       } else {
-        profileImg.src = `${API_URL}/uploads/default_avatar.png`;
+        profileImg.src = "https://i.ibb.co/q30dpJjX/default-avatar.png";
       }
     } else {
-      profileImg.src = `${API_URL}/uploads/default_avatar.png`;
+      profileImg.src = "https://i.ibb.co/q30dpJjX/default-avatar.png";
     }
   } catch (error) {
     console.error("Ошибка:", error.message);

@@ -127,7 +127,7 @@
             name.value = userData.name || "";
             surname.value = userData.surname || "";
             number.value = userData.number || "";
-            profileImg.src = `${API_URL}/uploads/` + userData.photo;
+            profileImg.src = userData.photo;
 
             gmail.value = userData.gmail;
             document.querySelector(".select-selected").textContent =

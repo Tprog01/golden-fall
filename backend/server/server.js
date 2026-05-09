@@ -5,6 +5,9 @@ const path = require("path");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const axios = require("axios");
+const FormData = require("form-data");
+const sharp = require("sharp");
 const db = require("./db");
 const multer = require("multer");
 const { decode } = require("punycode");
@@ -13,21 +16,11 @@ const { type } = require("os");
 
 const app = express();
 const rootPath = path.join(__dirname, "..", "..", "frontend");
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "/images/uploads"));
-  },
-  filename: (req, file, cb) => {
-    const uniqieName =
-      Date.now() +
-      "-" +
-      Math.round(Math.random() * 1e9) +
-      path.extname(file.originalname);
-    cb(null, uniqieName);
-  },
-});
+
+const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith("image/")) {
       cb(null, true);
@@ -46,6 +39,24 @@ const limiter = rateLimit({
     });
   },
 });
+
+async function uploadToImgBB(fileBuffer) {
+  const apiKey = "ВАШ_КЛЮЧ";
+
+  const compressedBuffer = await sharp(fileBuffer)
+    .resize(800)
+    .webp({ quality: 80 })
+    .toBuffer()
+    .toBuffer();
+
+  const form = new FormData();
+  form.append("image", compressedBuffer.toString("base64"));
+
+  const response = await axios.post(`https://imgbb.com{apiKey}`, form, {
+    headers: form.getHeaders(),
+  });
+  return response.data.data.url;
+}
 
 app.use(cors());
 app.use(express.json());
@@ -317,7 +328,6 @@ app.post("/api/photoLoad", upload.single("photo"), async (req, res) => {
     const token = authorization.split(" ")[1];
 
     if (!token || token === "null") {
-      if (req.file) fs.unlinkSync(req.file.path);
       return res.status(401).json({ message: "Нет токена" });
     }
 
@@ -327,15 +337,10 @@ app.post("/api/photoLoad", upload.single("photo"), async (req, res) => {
       return res.status(400).json({ message: "файл не загружен на сервер" });
     }
 
-    const [userRows] = await db.query("SELECT photo FROM users WHERE id = ?", [
-      decoded.id,
-    ]);
-    const oldPhoto = userRows[0]?.photo;
-
-    const photoPathForDb = `${req.file.filename}`;
+    const imageUrl = await uploadToImgBB(req.file.buffer);
 
     const [rows] = await db.query("UPDATE users SET photo = ? WHERE id = ?", [
-      photoPathForDb,
+      imageUrl,
       decoded.id,
     ]);
 
@@ -344,16 +349,8 @@ app.post("/api/photoLoad", upload.single("photo"), async (req, res) => {
       return res.status(404).json({ message: "Пользователь не найден" });
     }
 
-    if (oldPhoto && oldPhoto !== "default_avatar.png") {
-      const oldPath = path.join(__dirname, "/images/uploads", oldPhoto);
-      if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
-    }
     return res.status(200).json({ message: "Фото обновлено" });
   } catch (error) {
-    if (req.file) {
-      fs.unlinkSync(req.file.path);
-    }
-
     if (error.message === "Можно загружать только изображения!") {
       return res.status(400).json({ message: error.message });
     }
@@ -387,8 +384,6 @@ app.post("/api/saveData", async (req, res) => {
     ) {
       return res.status(400).json({ message: "Некорректный формат данных" });
     }
-
-    //const regex
 
     const token = authorization.split(" ")[1];
 

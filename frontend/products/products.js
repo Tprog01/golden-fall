@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       container.innerHTML += `            
         <div class="category-card">
             <div class="image-wrapper">
-                <img src="${API_URL}/uploads/productsPhotos/${item.photo}" alt="${item.title}">
+                <img src="${item.photo}" alt="${item.title}">
                 <button class="wishlist-btn ${favoriteClass}" data-id="${item.id}">❤</button>
             </div>                
             <h3 id="title">${item.title}</h3>
