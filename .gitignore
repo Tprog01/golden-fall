@@ -12,3 +12,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .DS_Store
+
+backend/server/images/uploads/*
+!backend/server/images/uploads/.gitkeep
