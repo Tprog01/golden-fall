@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Золотая осень</title>
+    <link rel="stylesheet" href="/index/style.css" />
+    <link rel="icon" href="/images/favicon.png" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-content">
+        <a href="../index/index.html" id="a-header">
+          <h1>Золотая осень</h1>
+          <p>Тепло и уют в каждой покупке</p>
+        </a>
+        <a href="#" id="profile-circle">
+          <img src="" alt="Профиль" />
+        </a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <nav>
+          <a href="../category/category.html">📂 Каталог товаров</a>
+          <a href="../cart/cart.html">🛒 Корзина</a>
+          <a href="../favorite/favorite.html">⭐ Избранное</a>
+          <a href="../contacts/contacts.html">📞 Контакты</a>
+        </nav>
+      </aside>
+
+      <main class="main">
+        <section class="hero">
+          <h2>Добро пожаловать 🍂</h2>
+          <p style="color: white; font-size: 17.2px">
+            Осенние товары для уюта и тепла
+          </p>
+          <a href="../category/category.html"
+            ><button>Смотреть товары</button></a
+          >
+        </section>
+
+        <section class="cards">
+          <div class="card">
+            <h3>🍎 Свежий урожай</h3>
+            <p>Лучшие овощи и фрукты прямо к вашему столу</p>
+          </div>
+
+          <div class="card">
+            <h3>🍂 Осенние скидки</h3>
+            <p>Запасайтесь любимыми продуктами по самым выгодным ценам</p>
+          </div>
+
+          <div class="card">
+            <h3>☕ Напитки</h3>
+            <p>Чай, кофе и какао для настроения</p>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="../js/config.js"></script>
+    <script src="../js/profileCurcle.js"></script>
+    <script src="../js/modalWindow.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const token = localStorage.getItem("token");
+
+        if (!token || token === "null") {
+          showToast("⚠️ Войдите в аккаунт, чтобы продолжить");
+          return;
+        }
+
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        if (payload.exp < Date.now() / 1000) {
+          showToast("⚠️ Сессия истекла, войдите в аккаунт снова");
+          localStorage.removeItem("token");
+          localStorage.setItem("isLoggedIn", "false");
+          return;
+        }
+
+        //реализовать вход администратора
+      });
+    </script>
+  </body>
+</html>

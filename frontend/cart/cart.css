@@ -1,0 +1,450 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: "Ura", sans-serif;
+  background: #fffafa;
+}
+
+/* --- ШАПКА --- */
+.header {
+  background: url(../images/background.png) no-repeat center/cover;
+  color: white;
+  padding: 30px 20px;
+}
+
+.header-content {
+  position: relative;
+  min-height: 100px;
+}
+
+#a-header {
+  text-decoration: none;
+  color: white;
+}
+
+.header h1 {
+  font-size: clamp(28px, 5vw, 48px);
+}
+.header p {
+  font-size: clamp(14px, 2vw, 20px);
+}
+
+#profile-circle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 50px;
+  height: 50px;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+#profile-circle img {
+  width: 100%;
+  height: auto;
+}
+
+/* --- ЛЕЙАУТ И САЙДБАР --- */
+.layout {
+  display: flex;
+}
+
+.sidebar {
+  width: 250px;
+  /* Используем высоту всей видимой области экрана */
+  height: 100vh;
+  background: #2c2c2c;
+  color: white;
+  padding: 20px;
+
+  /* Закрепляем */
+  position: sticky;
+  top: 0;
+
+  /* Если шапка страницы тоже должна оставаться сверху, 
+     то top должен быть равен высоте шапки, например: top: 80px; */
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  padding: 10px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+@media (hover: hover) {
+  .sidebar a:hover {
+    background: #ff8000;
+  }
+}
+
+/* --- КОНТЕНТ --- */
+.main {
+  flex: 1;
+  padding: 20px;
+}
+
+/* HERO СЕКЦИЯ */
+.hero {
+  background: linear-gradient(135deg, #ffd466, #ff6600);
+  padding: 40px;
+  border-radius: 20px;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.hero h2 {
+  font-size: clamp(24px, 4vw, 36px);
+}
+.hero p {
+  margin: 10px 0;
+}
+
+/* --- КОРЗИНА И СЕТКИ --- */
+.cards {
+  display: flex;
+  flex-direction: column; /* Это выстроит карточки в столбик */
+  gap: 15px; /* Расстояние между карточками */
+  width: 100%; /* Чтобы контейнер занимал всю ширину */
+  align-items: stretch; /* Чтобы карточки растягивались по ширине */
+}
+
+/* Контейнер для горизонтальных карточек */
+.categories-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+.cart-card {
+  display: flex; /* Сама карточка остается горизонтальной */
+  flex-direction: row; /* Элементы внутри (фото, текст) идут в ряд */
+  align-items: center;
+  width: 100%; /* Карточка растягивается на всю ширину списка */
+  background: white;
+  padding: 15px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.cart-img {
+  width: 100px;
+  height: 100px;
+  margin: 10px;
+  object-fit: cover;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.cart-info {
+  flex: 1;
+  text-align: left;
+}
+
+.cart-title {
+  font-size: 18px;
+  color: #333;
+  margin: 0;
+}
+.cart-price {
+  color: #ff6600;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+/* УПРАВЛЕНИЕ КОЛИЧЕСТВОМ */
+.cart-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.cart-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #f5f5f5;
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+
+.qty-btn {
+  background: none;
+  border: none;
+  font-size: 18-px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #222;
+  transition: color 0.3s;
+}
+
+.qty-num {
+  display: inline-block;
+  min-width: 45px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.qty-input {
+  width: 60px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 4px;
+  font-size: 16px;
+  -moz-appearance: textfield;
+}
+
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  transition: 0.3s;
+  border: none;
+}
+
+.delete-btn,
+.buy-button,
+.category-card button {
+  background: #222;
+  color: #fffafa;
+  font-weight: bold;
+  border-radius: 10px;
+  padding: 10px 20px;
+}
+
+/* Уникальные размеры */
+.delete-btn {
+  width: fit-content;
+}
+.buy-button {
+  width: fit-content;
+  min-width: 200px;
+  padding: 12px 25px;
+  margin-top: 15px;
+  white-space: nowrap;
+}
+.category-card button {
+  width: 80%;
+}
+
+@media (hover: hover) {
+  button:hover,
+  .qty-btn:hover {
+    color: #ff6600;
+  }
+}
+
+.reg-button {
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+
+  width: fit-content;
+  min-width: 200px;
+  padding: 12px 25px;
+  margin-top: 15px;
+  border: none;
+  background: #222;
+  color: #fffafa;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+
+@media (hover: hover) {
+  .reg-button:hover {
+    color: #ff6600;
+  }
+}
+
+@media (hover: hover) {
+  .delete-btn:hover {
+    background: #cc0000 !important;
+    color: white !important;
+  }
+}
+
+.hero button {
+  padding: 10px 20px;
+  background: white;
+  color: #ff6600;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+@media (hover: hover) {
+  .hero button:hover {
+    background: #222;
+    color: white;
+  }
+}
+
+.cart-footer {
+  position: sticky; /* Меняем fixed на sticky */
+  bottom: 10px; /* Расстояние от нижнего края экрана */
+
+  /* Ваши стили */
+  background: linear-gradient(180deg, #ffd56a, #ff6600);
+  padding: 20px 40px;
+  border-radius: 20px;
+  color: white;
+  margin: 20px 0 10px 0; /* Добавили отступ сверху, чтобы не липло к карточкам */
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+
+  /* Если нужно ограничить ширину, чтобы не заходило на aside */
+  width: auto;
+}
+
+.total-box {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.order-btn {
+  background: white;
+  color: #ff6600;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+@media (hover: hover) {
+  .order-btn:hover {
+    transform: scale(1.05);
+  }
+}
+
+/* Базовая настройка для десктопа (повторяем твой стиль) */
+.layout {
+  display: flex;
+}
+
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background: #2c2c2c;
+  color: white;
+  padding: 20px;
+  position: sticky;
+  top: 0;
+}
+
+@media (max-width: 768px) {
+  /* 1. Вертикальный стек и отступ под меню */
+  .layout {
+    flex-direction: column;
+    padding-bottom: 80px; /* Чтобы карточки в корзине не прятались под меню */
+  }
+
+  /* 2. Компактная шапка */
+  .header {
+    padding: 15px 10px;
+  }
+  .header h1 {
+    font-size: 22px;
+  }
+
+  .sidebar {
+    position: fixed !important;
+    bottom: 0 !important;
+    top: auto !important;
+    left: 0;
+    right: 0;
+    width: 100% !important;
+    height: 70px;
+    padding: 0;
+    background: #2c2c2c;
+    border-radius: 20px 20px 0 0;
+    z-index: 1000;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Располагаем ссылки в ряд */
+  .sidebar nav {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: stretch;
+    height: 100%;
+    gap: 0;
+  }
+
+  /* Стилизуем ссылки под кнопки приложения */
+  .sidebar a {
+    font-size: 14px; /* Маленький текст под иконкой */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 5px 0;
+    gap: 4px;
+    border-radius: 0;
+    text-align: center;
+  }
+
+  .sidebar a::first-line {
+    font-size: 20px;
+  }
+
+  .sidebar a:active {
+    background: #ff8000;
+  }
+
+  .sidebar nav a:first-child {
+    border-radius: 20px 0 0 0;
+  }
+
+  /* Последняя кнопка (правая) */
+  .sidebar nav a:last-child {
+    border-radius: 0 20px 0 0;
+  }
+
+  /* 4. Центрируем заголовок корзины на мобилке */
+  .hero {
+    text-align: center;
+    padding: 20px 10px;
+  }
+
+  .cart-container {
+    padding: 10px;
+  }
+}

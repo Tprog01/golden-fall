@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="registration.css" />
+    <link rel="icon" href="../images/favicon.png" />
+  </head>
+  <body>
+    <form id="auth-form" action="/register" method="POST">
+      <h2 class="form-title">Регистрация</h2>
+
+      <div class="input-group">
+        <label for="login">Логин</label>
+        <div class="input-wrapper" data-tooltip="Введите логин">
+          <input type="text" id="login" name="login" title="" required />
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="username">Имя</label>
+        <div class="input-wrapper" data-tooltip="Введите ваше имя">
+          <input
+            type="text"
+            id="username"
+            name="username"
+            autocomplete="username"
+            title=""
+            required
+          />
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="password">Пароль</label>
+        <div class="input-wrapper" data-tooltip="от 8 до 30 символов">
+          <input
+            type="password"
+            id="password"
+            name="password"
+            title=""
+            minlength="8"
+            autocomplete="new-password"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="confirm-password">Подтвердите пароль</label>
+        <div class="input-wrapper" data-tooltip="Пароли должны совпадать">
+          <input
+            type="password"
+            id="confirm-password"
+            name="confirm-password"
+            title=""
+            autocomplete="new-password"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="button-group">
+        <a href="../index/index.html"
+          ><button type="submit" class="btn-main">Создать аккаунт</button></a
+        >
+        <a href="../login/login.html" class="btn-link">Уже есть аккаунт?</a>
+      </div>
+    </form>
+    <script src="../js/config.js"></script>
+    <script src="registration.js"></script>
+  </body>
+</html>

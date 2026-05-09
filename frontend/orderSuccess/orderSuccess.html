@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Заказ оформлен</title>
+    <link rel="icon" href="/images/favicon.png" />
+    <style>
+      /*  @font-face {
+  font-family: "Ura";
+  src: url("../fonts/ofont.ru_Ura\ Bum\ Bum\ SP.ttf");
+  font-weight: normal;
+  font-style: normal;
+}*/
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        font-family: "Ura", sans-serif;
+        background: #fffafa;
+      }
+
+      /* ШАПКА */
+      .header {
+        background: url(/images/background.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        color: white;
+        padding: 30px 20px;
+      }
+
+      .header-content {
+        position: relative;
+        min-height: 100px;
+      }
+
+      #profile-circle {
+        position: absolute; /* Вырываем из потока */
+        top: 10px; /* Отступ от верхнего края */
+        right: 10px; /* Отступ от правого края */
+
+        width: 50px; /* Размер круга */
+        height: 50px;
+        background-color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      #profile-circle img {
+        width: 100%;
+        border-radius: 50%;
+        height: auto;
+      }
+
+      #a-header {
+        text-decoration: none;
+        color: white;
+      }
+
+      .header h1 {
+        font-size: clamp(28px, 5vw, 48px);
+      }
+
+      .header p {
+        font-size: clamp(14px, 2vw, 20px);
+      }
+
+      /* ЛЕЙАУТ */
+      .layout {
+        display: flex;
+      }
+
+      .sidebar {
+        width: 250px;
+        /* Используем высоту всей видимой области экрана */
+        height: 100vh;
+        background: #2c2c2c;
+        color: white;
+        padding: 20px;
+
+        /* Закрепляем */
+        position: sticky;
+        top: 0;
+      }
+
+      .sidebar nav {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .sidebar a {
+        color: white;
+        text-decoration: none;
+        font-size: 18px;
+        padding: 10px;
+        border-radius: 8px;
+        transition: 0.3s;
+      }
+      @media (hover: hover) {
+        .sidebar a:hover {
+          background: #ff8000;
+        }
+      }
+
+      /* CONTENT */
+      .content {
+        flex: 1;
+        padding: 30px;
+      }
+
+      /* SUCCESS CARD */
+      .success-card {
+        background: linear-gradient(90deg, #ffb347, #ff7e00);
+        color: white;
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .success-card .icon {
+        font-size: 50px;
+        margin-bottom: 10px;
+      }
+
+      /* ORDER INFO */
+      .order-info {
+        background: white;
+        margin-top: 20px;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .order-info h3 {
+        margin-bottom: 10px;
+      }
+
+      /* BUTTON */
+      .actions {
+        margin-top: 20px;
+      }
+
+      .btn {
+        width: fit-content;
+        min-width: 120px;
+        padding: 10px 20px;
+        border: none;
+        background: #222;
+        color: #fffafa;
+        font-weight: bold;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      @media (hover: hover) {
+        .btn:hover {
+          background: #222;
+          color: #ff6600;
+        }
+      }
+
+      @media (max-width: 768px) {
+        /* Убираем лишние отступы и меняем направление контента */
+        .layout {
+          flex-direction: column;
+          padding-bottom: 80px; /* Отступ снизу под панель навигации */
+        }
+
+        /* Переделываем боковую панель в нижнюю фиксированную */
+        .sidebar {
+          position: fixed !important;
+          bottom: 0 !important;
+          top: auto !important;
+          left: 0;
+          right: 0;
+          width: 100% !important;
+          height: 70px;
+          padding: 0;
+          background: #2c2c2c;
+          border-radius: 20px 20px 0 0;
+          z-index: 1000;
+          box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Располагаем ссылки в ряд */
+        .sidebar nav {
+          flex-direction: row;
+          justify-content: space-around;
+          align-items: center;
+          height: 100%;
+          gap: 0;
+        }
+
+        /* Стилизуем ссылки под кнопки приложения */
+        .sidebar a {
+          font-size: 14px; /* Маленький текст под иконкой */
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          flex: 1;
+          padding: 5px 0;
+          gap: 4px;
+          border-radius: 0;
+          text-align: center;
+        }
+
+        /* Чтобы иконки были крупнее текста */
+        .sidebar a::first-line {
+          font-size: 20px;
+        }
+
+        /* Адаптируем основной контент */
+        .content {
+          padding: 15px;
+        }
+
+        .success-card {
+          padding: 25px 15px;
+        }
+
+        .header h1 {
+          font-size: 22px;
+        }
+
+        .btn {
+          width: 100%; /* Кнопка на всю ширину на мобилках */
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-content">
+        <a href="../index/index.html" id="a-header">
+          <h1>Золотая осень</h1>
+          <p>Тепло и уют в каждой покупке</p>
+        </a>
+        <a href="#" id="profile-circle">
+          <img src="" alt="Профиль" />
+        </a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <nav>
+          <a href="../index/index.html">🏠 Главная</a>
+          <a href="../cart/cart.html">🛒 Корзина</a>
+          <a href="../favorite/favorite.html">⭐ Избранное</a>
+          <a href="../contacts/contacts.html">📞 Контакты</a>
+        </nav>
+      </aside>
+
+      <main class="content">
+        <div class="success-card">
+          <div class="icon">✅</div>
+          <h2>Заказ успешно оформлен!</h2>
+          <p>Спасибо за покупку. Мы уже начали обработку вашего заказа.</p>
+        </div>
+
+        <div class="order-info">
+          <h3>Информация о заказе</h3>
+          <p id="order-number"><strong>Номер заказа:</strong></p>
+          <p id="order-date"><strong>Дата:</strong></p>
+          <p id="total-price"><strong>Общая сумма:</strong></p>
+        </div>
+
+        <div class="actions">
+          <a
+            href="/category/category.html"
+            class="btn"
+            style="text-decoration: none; display: inline-block"
+          >
+            Вернуться в каталог
+          </a>
+        </div>
+      </main>
+    </div>
+    <script src="../js/config.js"></script>
+    <script src="../js/profileCurcle.js"></script>
+    <script src="../js/modalWindow.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        const token = localStorage.getItem("token");
+        const orderNumber = document.getElementById("order-number");
+        const orderDate = document.getElementById("order-date");
+        const totalPrice = document.getElementById("total-price");
+
+        const response = await fetch("/api/getOrderData", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          orderNumber.innerHTML = `<strong>Номер заказа:</strong> #${result.id}`;
+          orderDate.innerHTML = `<strong>Дата:</strong> ${result.date}`;
+          totalPrice.innerHTML = `<strong>Общая сумма:</strong> ${result.total_price} ₽`;
+        } else {
+          document.querySelector(".order-info").innerHTML =
+            "<p>Информация о последнем заказе недоступна.</p>";
+        }
+      });
+    </script>
+  </body>
+</html>

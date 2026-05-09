@@ -1,0 +1,311 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: "Segoe UI", Roboto, sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+.navbar {
+  background: white;
+  padding: 15px 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.nav-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.nav-logo {
+  font-size: 22px;
+  font-weight: bold;
+  color: #ff8000;
+  text-decoration: none;
+}
+
+.nav-links a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #666;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+/* Контейнер формы */
+.profile-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 50px 20px;
+}
+
+.profile-card {
+  background: white;
+  width: 100%;
+  max-width: 550px;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+#profile-circle {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 15px;
+}
+
+#profile-circle img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #eee;
+}
+
+.upload-label {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: #ff8000;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 22px;
+  line-height: 0;
+  padding-bottom: 3px;
+
+  box-sizing: border-box;
+}
+
+/* Форма */
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-row {
+  display: flex;
+  gap: 20px;
+}
+
+.input-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-group label {
+  font-size: 13px;
+  color: #888;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.input-group input {
+  padding: 14px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 16px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.input-group input:focus {
+  border-color: #ff8000;
+}
+
+/* 1. Настройка строки почты */
+.gmail-row {
+  display: flex; /* Включаем гибкий ряд */
+  align-items: center; /* Центрируем по вертикали */
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 5px 15px;
+  background: white;
+  margin-top: 5px; /* Отступ от надписи "Эл. почта" если она есть */
+}
+
+/* 2. Настройка инпута внутри строки */
+#gmail-name {
+  flex: 1; /* Растягивается на все свободное место */
+  border: none !important; /* Убираем рамку самого инпута */
+  outline: none;
+  padding: 10px 0;
+  font-size: 16px;
+  background: transparent;
+}
+
+/* 3. Собачка */
+.at-symbol {
+  padding: 0 10px;
+  color: #888;
+  font-weight: bold;
+}
+
+/* контейнер */
+.custom-select {
+  position: relative;
+  min-width: 120px;
+}
+
+/* выбранный домен */
+.select-selected {
+  padding: 10px 0;
+  text-align: right;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* список */
+.select-items {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  top: 110%;
+  right: 0;
+  width: 150px;
+  z-index: 1000;
+}
+
+.select-hide {
+  display: none;
+}
+
+.select-items div {
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* Кнопки */
+.form-buttons {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn-primary {
+  background: #ff8000;
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+@media (hover: hover) {
+  .btn-primary:hover {
+    background: #e67300;
+  }
+
+  .custom-select:focus,
+  .select-selected:focus {
+    outline: none;
+  }
+
+  .select-items div:hover {
+    background-color: #f8f9fa;
+    color: #ff8000;
+  }
+
+  .nav-links a:hover {
+    color: #ff8000;
+  }
+
+  .btn-secondary:hover {
+    color: #ff4444;
+  }
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #999;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  /* 1. Настройка контейнеров */
+  .layout {
+    flex-direction: column;
+    padding-bottom: 90px; /* Запас под меню */
+  }
+
+  .profile-wrapper {
+    padding: 15px;
+  }
+
+  .profile-card {
+    margin-top: 50px;
+    width: 100%;
+    padding: 20px;
+    border-radius: 15px;
+  }
+
+  /* Имя и Фамилия в один столбец */
+  .input-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  /* Почта: делаем перенос, если не влезает */
+  .gmail-row {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  #gmail-name {
+    flex: 1;
+    min-width: 150px;
+  }
+
+  .at-symbol {
+    padding: 0 5px;
+  }
+
+  /* Кнопки Сохранить и Выйти одна под другой */
+  .form-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+  }
+}

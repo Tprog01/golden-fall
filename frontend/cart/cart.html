@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Золотая осень</title>
+    <link rel="stylesheet" href="cart.css" />
+    <link rel="icon" href="../images/favicon.png" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-content">
+        <a href="../index/index.html" id="a-header">
+          <h1>Золотая осень</h1>
+          <p>Тепло и уют в каждой покупке</p>
+        </a>
+        <a href="#" id="profile-circle">
+          <img src="" alt="Профиль" />
+        </a>
+      </div>
+    </header>
+    <div class="layout">
+      <aside class="sidebar">
+        <nav>
+          <a href="../index/index.html">🏠 Главная</a>
+          <a href="../category/category.html">📂 Каталог товаров</a>
+          <a href="../favorite/favorite.html">⭐ Избранное</a>
+          <a href="../contacts/contacts.html">📞 Контакты</a>
+        </nav>
+      </aside>
+      <main class="main">
+        <section class="hero">
+          <!-- Используем ваш стиль Hero для заголовка корзины -->
+          <h2>🧺 Моя корзина</h2>
+          <p>Проверьте товары перед оформлением заказа</p>
+        </section>
+
+        <div class="cart-container">
+          <div class="cards"></div>
+        </div>
+      </main>
+    </div>
+    <script src="../js/config.js"></script>
+    <script src="../js/profileCurcle.js"></script>
+    <script src="../js/modalWindow.js"></script>
+    <script>
+      let cartData = [];
+      function calculateSum(result) {
+        let total = 0;
+        result.forEach((item) => (total += item.price * item.quantity));
+        return total.toFixed(2);
+      }
+
+      function updateTotalUI(result) {
+        const priceElement = document.getElementById("total-price");
+        if (priceElement) {
+          priceElement.innerText = calculateSum(result);
+        }
+      }
+
+      window.addEventListener("pageshow", (event) => {
+        if (event.persisted) {
+          window.location.reload();
+        }
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        loadUI();
+      });
+
+      async function loadUI() {
+        const token = localStorage.getItem("token");
+
+        try {
+          if (
+            !token ||
+            JSON.parse(atob(token.split(".")[1])).exp < Date.now() / 1000
+          ) {
+            document.querySelector(".cards").innerHTML = `
+              <div
+          style="
+            display: flex;
+            margin-top: 50px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+          "
+        >
+          <h3 style="">Для просмотра корзины необходимо авторизоваться</h3>
+
+          <a href="/login/login.html" class="reg-button">
+            Войти в аккаунт
+          </a>
+        </div>`;
+            return;
+          }
+          const response = await fetch("/api/loadCart", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${token}`,
+            },
+          });
+          cartData = await response.json();
+
+          if (response.ok) {
+            if (cartData.message === "Корзина пуста") {
+              document.querySelector(".cards").innerHTML = `
+          <div style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 50px;
+            width: 100%;
+            color: #2c2c2c;
+          ">
+            <h2>Ваша корзина пуста</h2>
+            <p style="margin-top: 10px;">Самое время добавить в неё что-нибудь!</p>
+            <a href="/category/category.html" class="back-button" style="text-decoration: none;">
+              <button class="buy-button"
+            >
+              Перейти к покупкам
+            </button>
+            </a>
+          </div>`;
+            } else {
+              const container = document.querySelector(".cards");
+
+              if (!container)
+                return console.error("Контейнер .cards не найден!");
+
+              container.innerHTML = "";
+
+              cartData.forEach((item) => {
+                const num =
+                  item.unit === "кг."
+                    ? Number(item.quantity).toFixed(2)
+                    : Number(item.quantity).toFixed(0);
+                container.innerHTML += `
+                <div class="cart-card">
+                  <img src="${API_URL}/uploads/productsPhotos/${item.photo}" alt="${item.title}" class="cart-img">
+
+                  <div class="cart-info">
+                    <h3 class="cart-title">${item.title}</h3>
+                    <p class="cart-price"><span style="color: #2c2c2c">Цена: </span>${item.price} ₽</p>
+                    <p class="cart-price"><span style="color: #2c2c2c">Всего: </span> ${item.stock} ${item.unit}</p>
+                  </div>
+
+                  <div class="cart-actions">
+                    <div class="cart-controls">
+                      <button class="qty-btn" onclick="minusItem(${item.products_id}, '${item.unit}')" data-id="${item.products_id}">-</button>
+                      <input 
+                        type="text"
+                        class="qty-input"
+                        id="qty-${item.products_id}"
+                        value="${num}"
+                        onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 44 || event.charCode == 46"
+                        onchange="updateQuantityManual(${item.products_id}, this.value, ${item.stock}, '${item.unit}')"
+                      > <strong>${item.unit}</strong>
+                      <button class="qty-btn" onclick="plusItem(${item.products_id}, ${item.stock}, '${item.unit}')" data-id="${item.products_id}">+</button>
+                    </div>
+                    <button class="delete-btn" onclick="deleteItem(${item.products_id})" data-id="${item.products_id}">Удалить</button>
+                  </div>
+                </div>
+              `;
+              });
+
+              container.innerHTML += `
+              <div class="cart-footer">
+                <div class="total-box">
+                  <span style="opacity: 0.9; font-size: 0.9em;">Итого к оплате:</span>
+                  <strong style="font-size: 1.4em;"><span id="total-price">${calculateSum(cartData)}</span> ₽</strong>
+                </div>
+                <button class="order-btn">Оформить заказ</button>
+              </div>
+            `;
+            }
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      async function deleteItem(itemId) {
+        const token = localStorage.getItem("token");
+
+        try {
+          if (token) {
+            const response = await fetch("/api/delete", {
+              method: "DELETE",
+              headers: {
+                authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ itemId: itemId }),
+            });
+            const result = await response.json();
+            console.log(result);
+            loadUI();
+          } else {
+            console.error(`Токен не был обработан: ${token}`);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      let timer = 0;
+
+      async function minusItem(itemId, unit) {
+        const quantityInput = document.getElementById(`qty-${itemId}`); // Это теперь input
+        const step = unit === "кг." ? 0.05 : 1;
+        let number = parseFloat(quantityInput.value.replace(",", ".")); // Берем .value
+
+        if (number > step) {
+          // Уменьшаем, если текущее число больше шага
+          const orderButton = document.querySelector(".order-btn");
+          if (orderButton) {
+            orderButton.disabled = true;
+            orderButton.style.pointerEvents = "none";
+            orderButton.style.opacity = "0.7";
+          }
+
+          number = parseFloat((number - step).toFixed(2));
+          quantityInput.value = number; // Записываем обратно в .value
+
+          const item = cartData.find((p) => p.products_id === itemId);
+          if (item) {
+            item.quantity = number;
+          }
+
+          clearTimeout(timer);
+          timer = setTimeout(() => {
+            sendQuantityToServer(itemId, number);
+          }, 500);
+        }
+      }
+
+      async function plusItem(itemId, stock, unit) {
+        const quantityInput = document.getElementById(`qty-${itemId}`);
+        const orderButton = document.querySelector(".order-btn");
+
+        if (orderButton) {
+          orderButton.disabled = true;
+          orderButton.style.pointerEvents = "none";
+          orderButton.style.opacity = "0.7";
+        }
+
+        let number = parseFloat(quantityInput.value.replace(",", ".")); // Берем .value
+        const step = unit === "кг." ? 0.05 : 1;
+
+        if (number < stock) {
+          number = parseFloat((number + step).toFixed(2));
+          if (number > stock) number = stock; // Страховка от перелета за stock
+        }
+
+        quantityInput.value = number; // Записываем обратно в .value
+
+        const item = cartData.find((p) => p.products_id === itemId);
+        if (item) {
+          item.quantity = number;
+        }
+
+        clearTimeout(timer);
+        timer = setTimeout(async () => {
+          await sendQuantityToServer(itemId, number);
+        }, 500);
+      }
+
+      function updateQuantityManual(itemId, newValue, stock, unit) {
+        let val = newValue.toString().replace(",", ".");
+        val = parseFloat(val);
+
+        if (isNaN(val)) {
+          showToast("Пожалуйста, введите число");
+          document.getElementById(`qty-${itemId}`).value =
+            unit === "шт." ? 1 : "1.00";
+          return;
+        }
+
+        if (unit === "шт.") {
+          val = Math.floor(val);
+        }
+        if (val > stock) {
+          showToast(`На складе доступно: ${stock}`);
+          val = stock;
+        }
+        if (val <= 0) {
+          val = unit === "шт." ? 1 : 0.1;
+        }
+
+        const formattedVal = unit === "шт." ? val : parseFloat(val.toFixed(2));
+        document.getElementById(`qty-${itemId}`).value =
+          unit === "шт." ? formattedVal : formattedVal.toFixed(2);
+        sendQuantityToServer(itemId, Number.parseFloat(formattedVal));
+      }
+
+      async function sendQuantityToServer(itemId, number) {
+        const token = localStorage.getItem("token");
+        const orderButton = document.querySelector(".order-btn");
+        try {
+          if (token) {
+            const response = await fetch("/api/changeQuantity", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({ itemId: itemId, number: number }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              updateTotalUI(cartData);
+            } else {
+              showToast(`Ошибка: ${data.message}`);
+            }
+            orderButton.disabled = false;
+            orderButton.style.pointerEvents = "auto";
+            orderButton.style.opacity = "1";
+          } else {
+            console.error(`Ошибка обработки токена: ${token}`);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      document.addEventListener("click", async (e) => {
+        if (e.target && e.target.classList.contains("order-btn")) {
+          try {
+            const token = localStorage.getItem("token");
+            if (
+              !token ||
+              JSON.parse(atob(token.split(".")[1])).exp < Date.now() / 1000
+            ) {
+              console.error("Токен отсутствует:");
+              return;
+            }
+            const response = await fetch("/api/fillOrder", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({ totalPrice: calculateSum(cartData) }),
+            });
+            if (response.ok) {
+              window.location.href = "/orderSuccess/orderSuccess.html";
+            }
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

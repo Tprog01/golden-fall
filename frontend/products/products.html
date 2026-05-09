@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Золотая осень</title>
+    <link rel="stylesheet" href="products.css" />
+    <link rel="icon" href="../images/favicon.png" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-content">
+        <a href="../index/index.html" id="a-header">
+          <h1>Золотая осень</h1>
+          <p>Тепло и уют в каждой покупке</p>
+        </a>
+        <a href="#" id="profile-circle">
+          <img src="" alt="Профиль" />
+        </a>
+      </div>
+    </header>
+
+    <div class="container">
+      <aside class="sidebar">
+        <nav>
+          <a href="../index/index.html">🏠 Главная</a>
+          <a href="../cart/cart.html">🛒 Корзина</a>
+          <a href="../favorite/favorite.html">⭐ Избранное</a>
+          <a href="../contacts/contacts.html">📞 Контакты</a>
+        </nav>
+      </aside>
+
+      <main class="content">
+        <div class="card">
+          <span class="category">Категории товаров</span>
+          <div class="categories-grid"></div>
+        </div>
+
+        <button class="back-button" onclick="history.back()">← Назад</button>
+      </main>
+    </div>
+    <script src="../js/config.js"></script>
+    <script src="../js/profileCurcle.js"></script>
+    <script src="../js/modalWindow.js"></script>
+    <script src="products.js"></script>
+  </body>
+</html>

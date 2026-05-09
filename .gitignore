@@ -1,0 +1,14 @@
+# Зависимости (самые тяжелые папки, их нельзя пушить)
+node_modules/
+backend/db/node_modules/
+backend/server/node_modules/
+
+# Конфиденциальные данные (ключи, пароли, настройки БД)
+.env
+backend/server/.env
+
+# Логи и временные файлы
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store

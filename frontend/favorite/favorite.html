@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Золотая осень</title>
+    <link rel="icon" href="../images/favicon.png" />
+    <style>
+      /*@font-face {
+        font-family: "Ura";
+        src: url(../fonts/ofont.ru_Ura\ Bum\ Bum\ SP.ttf);
+      }*/
+
+      /*@font-face {
+        font-family: "Ura";
+        src: url(../fonts/ofont.ru_Ura\ Bum\ Bum\ SP.ttf);
+      }*/
+
+      /*@font-face {
+        font-family: "Ura";
+        src: url(../fonts/ofont.ru_Ura\ Bum\ Bum\ SP.ttf);
+      }*/
+
+      @keyframes heartPulse {
+        0% {
+          transform: scale(1);
+        }
+        30% {
+          transform: scale(0.8);
+        }
+        60% {
+          transform: scale(1.15);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .pulse {
+        animation: heartPulse 0.4s ease-out;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        background: #fffafa;
+        font-family: "Ura", sans-serif;
+      }
+
+      .header {
+        background: url(../images/background.png) no-repeat center / cover;
+        color: white;
+        padding: 30px 20px;
+      }
+
+      .header-content {
+        position: relative;
+        min-height: 100px;
+      }
+
+      #profile-circle {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 50px;
+        height: 50px;
+        background-color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      #profile-circle img {
+        width: 100%;
+        border-radius: 50%;
+        height: auto;
+      }
+
+      #a-header {
+        text-decoration: none;
+        color: white;
+      }
+
+      .header h1 {
+        font-size: clamp(28px, 5vw, 48px);
+      }
+
+      .header p {
+        font-size: clamp(14px, 2vw, 20px);
+      }
+
+      .container {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        width: 100%;
+        gap: 20px;
+      }
+
+      .sidebar {
+        width: 250px;
+        height: 100vh;
+        background: #2c2c2c;
+        color: white;
+        padding: 20px;
+        position: sticky;
+        top: 0;
+      }
+
+      .sidebar nav {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .sidebar a {
+        color: white;
+        text-decoration: none;
+        font-size: 18px;
+        padding: 10px;
+        border-radius: 8px;
+        transition: 0.3s;
+      }
+      @media (hover: hover) {
+        .sidebar a:hover {
+          background: #ff8000;
+        }
+      }
+
+      .content {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 20px;
+      }
+
+      .card {
+        width: 100%;
+        min-height: 300px;
+        background: linear-gradient(180deg, #ffd56a, #ff6600);
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .category {
+        align-self: flex-start;
+        font-size: clamp(20px, 3vw, 30px);
+        color: white;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .section-title {
+        margin-bottom: 25px;
+        color: #2c2c2c;
+        font-size: 24px;
+      }
+
+      .categories-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 20px;
+      }
+
+      .category-card {
+        background: white;
+        padding: 15px 10px;
+        border-radius: 15px;
+        text-align: center;
+        color: #333;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        transition: 0.3s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .image-wrapper {
+        position: relative;
+        width: fit-content;
+        display: flex;
+        border-radius: 10px;
+        justify-content: center;
+        overflow: hidden;
+        line-height: 0;
+      }
+
+      .category-card img {
+        display: block;
+        width: 100%;
+        max-width: 200px;
+        height: auto;
+        object-fit: contain;
+        margin-bottom: 10px;
+        border-radius: 10px;
+      }
+
+      .category-card h3 {
+        margin-bottom: 5px;
+        font-size: 18px;
+      }
+
+      .category-card p {
+        margin-bottom: 5px;
+        font-size: 14px;
+      }
+
+      .category-card .wishlist-btn {
+        position: absolute;
+        top: 0px;
+        right: 5px;
+        width: 35px;
+        height: 35px;
+        background: rgba(255, 255, 255, 0.85);
+        color: #b1b1b1;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        z-index: 10;
+      }
+
+      /*.category-card .wishlist-btn:hover {
+        background: #ffffff;
+        transform: scale(1.1);
+        color: #ff4d4d;
+      }*/
+
+      .category-card .wishlist-btn.active {
+        background: #ffffff;
+        color: #ff4d4d;
+      }
+
+      @media (hover: hover) {
+        .category-card .wishlist-btn:hover {
+          background: #ffffff;
+          transform: scale(1.1);
+        }
+        .category-card .back-button:hover,
+        .sidebar a:hover {
+          background: #ff8000;
+        }
+      }
+
+      .category-card button {
+        width: 80%;
+        padding: 10px 20px;
+        border: none;
+        background: #222;
+        color: #fffafa;
+        font-weight: bold;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 5px;
+      }
+
+      .back-button {
+        width: fit-content;
+        min-width: 120px;
+        background: #222;
+        color: #fffafa;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s;
+        margin-top: 20px;
+      }
+      @media (hover: hover) {
+        button:hover {
+          color: #ff6600;
+        }
+      }
+
+      @media (max-width: 768px) {
+        @keyframes heartPulse {
+          0% {
+            transform: scale(1);
+          }
+          30% {
+            transform: scale(0.8);
+          }
+          60% {
+            transform: scale(1.15);
+          }
+          100% {
+            transform: scale(1);
+          }
+        }
+
+        .pulse {
+          animation: heartPulse 0.4s ease-out;
+        }
+
+        body {
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        .container {
+          flex-direction: column;
+          padding-bottom: 90px;
+          gap: 10px;
+        }
+
+        .header {
+          padding: 15px 10px;
+        }
+        .header h1 {
+          font-size: 24px;
+        }
+
+        .sidebar {
+          position: fixed !important;
+          bottom: 0 !important;
+          top: auto !important;
+          left: 0;
+          right: 0;
+          width: 100% !important;
+          height: 70px;
+          padding: 0;
+          background: #2c2c2c;
+          border-radius: 20px 20px 0 0;
+          z-index: 1000;
+          box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Располагаем ссылки в ряд */
+        .sidebar nav {
+          flex-direction: row;
+          justify-content: space-around;
+          align-items: stretch;
+          height: 100%;
+          gap: 0;
+        }
+
+        
+        .sidebar a {
+          font-size: 14px;
+          display: flex;
+          height: 100%;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          flex: 1;
+          padding: 5px 0;
+          gap: 4px;
+          border-radius: 0;
+          text-align: center;
+        }
+
+        /* Чтобы иконки были крупнее текста */
+        .sidebar a::first-line {
+          font-size: 20px;
+        }
+
+        .sidebar a:active {
+          background: #ff8000;
+        }
+
+        .categories-grid {
+          grid-template-columns: 1fr 1fr !important;
+          gap: 10px !important;
+        }
+
+        .category-card {
+          padding: 10px 5px;
+        }
+
+        .category-card h3 {
+          font-size: 14px;
+        }
+
+        button,
+        .back-button {
+          width: 100%;
+          font-size: 12px;
+          transition: 0.3s;
+        }
+
+        .category-card button:active,
+        .back-button:active {
+          color: #ff6600 !important;
+        }
+
+        .category-card .wishlist-btn {
+          transition:
+            transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+            color 0.3s ease;
+        }
+
+        .category-card .wishlist-btn:active {
+          color: #ff4d4d !important;
+        }
+
+        /* Состояние когда товар уже в избранном */
+        .category-card .wishlist-btn.active {
+          color: #ff4d4d !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-content">
+        <a href="../index/index.html" id="a-header">
+          <h1>Золотая осень</h1>
+          <p>Тепло и уют в каждой покупке</p>
+        </a>
+        <a href="#" id="profile-circle">
+          <img src="" alt="Профиль" />
+        </a>
+      </div>
+    </header>
+
+    <div class="container">
+      <aside class="sidebar">
+        <nav>
+          <a href="../index/index.html">🏠 Главная</a>
+          <a href="../category/category.html">📂 Каталог товаров</a>
+          <a href="../cart/cart.html">🛒 Корзина</a>
+          <a href="../contacts/contacts.html">📞 Контакты</a>
+        </nav>
+      </aside>
+
+      <main class="content">
+        <div class="card">
+          <span class="category">Ваши любимые товары</span>
+          <div class="categories-grid"></div>
+        </div>
+
+        <button class="back-button" onclick="history.back()">← Назад</button>
+      </main>
+    </div>
+    <script src="../js/config.js"></script>
+    <script src="../js/profileCurcle.js"></script>
+    <script src="../js/modalWindow.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        try {
+          const token = localStorage.getItem("token");
+
+          if (!token || token === "null") {
+            showToast(
+              "⚠️ Войдите в аккаунт, чтобы посмотреть избранные товары",
+            );
+            return;
+          }
+
+          const payload = JSON.parse(atob(token.split(".")[1]));
+          if (payload.exp < Date.now() / 1000) {
+            showToast("⚠️ Сессия истекла, войдите в аккаунт снова");
+            localStorage.removeItem("token");
+            localStorage.setItem("isLoggedIn", "false");
+            window.location.href = "/login/login.html";
+            return;
+          }
+
+          const response = await fetch("/api/getFavorite", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${token}`,
+            },
+          });
+          if (!response.ok) throw new Error("Ошибка при получении данных");
+
+          const products = await response.json();
+          const container = document.querySelector(".categories-grid");
+
+          if (!container)
+            return console.error("Контейнер .categories-grid не найден!");
+
+          container.innerHTML = "";
+
+          if (!products || products.length === 0) {
+            container.innerHTML = `<p style="color: white;">Тут ничего нет :(</p>`;
+            return;
+          }
+
+          products.forEach((item) => {
+            const displayStock = Number(item.stock);
+            const favoriteClass = item.isFavorite ? "active" : "";
+
+            container.innerHTML += `
+              <div class="category-card">
+                  <div class="image-wrapper">
+                      <img src="${API_URL}/uploads/productsPhotos/${item.photo}" alt="${item.title}">
+                      <button class="wishlist-btn ${favoriteClass}" data-id="${item.id}">❤</button>
+                  </div>
+                  <h3 id="title">${item.title}</h3>
+                  <p>Цена: ${item.price} руб.</p>
+                  <p>В наличии: ${displayStock} ${item.unit}</p>
+                  <button class="add-to-cart" data-id="${item.id}">В корзину</button>
+              </div>
+          `;
+          });
+        } catch (error) {
+          console.error("Ошибка:", error.message);
+          document.querySelector(".categories-grid").innerHTML =
+            `<p style = "color: white; font-size: clamp(14px, 2vw, 20px);">Не удалось загрузить товары :(</p> 
+            <br>
+            <span style = "color: white; font-size: clamp(14px, 2vw, 20px);">Авторизация на сайте должна решить проблему</span>`;
+        }
+      });
+
+      document.addEventListener("click", async (e) => {
+        const token = localStorage.getItem("token");
+
+        if (e.target.classList.contains("add-to-cart")) {
+          if (
+            token === null ||
+            JSON.parse(atob(token.split(".")[1])).exp < Date.now() / 1000
+          ) {
+            showToast(
+              "Для добавления товара в корзину необходимо войти в аккаунт",
+            );
+            return;
+          }
+          const productId = e.target.dataset.id;
+          const response = await fetch("/api/addToCart", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ productId }),
+          });
+
+          const result = await response.json();
+          if (response.ok) {
+            if (result.message === "Количество товаров в корзине увеличено") {
+              showToast(
+                `Количество товаров в корзине увеличено: ${result.quantity}`,
+              );
+            } else if (result.message === "Товар добавлен в корзину") {
+              showToast("Товар добавлен в корзину!");
+            }
+          } else {
+            showToast(result.message || "Ошибка при добавлении");
+          }
+        }
+      });
+
+      document.addEventListener("click", async (e) => {
+        const btn = e.target.closest(".wishlist-btn");
+        if (!btn) return;
+
+        const token = localStorage.getItem("token");
+
+        if (!token || token === "null") {
+          showToast("Войдите в аккаунт, чтобы добавлять товары в избранное");
+          return;
+        }
+
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        if (payload.exp < Date.now() / 1000) {
+          showToast("Сессия истекла, войдите снова");
+          localStorage.removeItem("token");
+          window.location.href = "/login/login.html";
+          return;
+        }
+
+        const productId = btn.dataset.id;
+        try {
+          const response = await fetch("/api/setFavorite", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ productId }),
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            if (result.isFavorite) {
+              btn.classList.add("active");
+            } else {
+              btn.classList.remove("active");
+            }
+
+            btn.classList.add("pulse");
+
+            setTimeout(() => {
+              btn.classList.remove("pulse");
+            }, 400);
+
+            btn.blur();
+          } else {
+            showToast(result.message);
+          }
+        } catch (err) {
+          console.error("Ошибка сети:", err);
+        }
+      });
+    </script>
+  </body>
+</html>

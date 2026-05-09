@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Золотая осень</title>
+    <link rel="stylesheet" href="profile.css" />
+    <link rel="icon" href="../images/favicon.png" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="/index/index.html" class="nav-logo">
+          <span class="logo-icon">🍂</span> Золотая осень
+        </a>
+        <div class="nav-links">
+          <a href="/index/index.html">На главную</a>
+          <a href="/cart/cart.html">Корзина</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="profile-wrapper">
+      <main class="profile-card">
+        <div class="profile-header">
+          <div id="profile-circle">
+            <img id="preview" src="#" alt="Аватар" />
+            <div class="upload-label" id="add-photo">
+              <span style="font-size: 20px">+</span>
+            </div>
+            <input type="file" id="avatar-upload" hidden accept="image/*" />
+          </div>
+          <h2>Мой профиль</h2>
+        </div>
+
+        <form class="profile-form" onsubmit="event.preventDefault()">
+          <div class="input-row">
+            <div class="input-group">
+              <label>Имя</label>
+              <input
+                type="text"
+                placeholder="Ваше имя"
+                id="name"
+                class="standart-input"
+              />
+            </div>
+            <div class="input-group">
+              <label>Фамилия</label>
+              <input
+                type="text"
+                placeholder="Ваша фамилия"
+                id="surname"
+                class="standart-input"
+              />
+            </div>
+          </div>
+
+          <div class="input-group">
+            <div class="gmail-row">
+              <input
+                type="text"
+                id="gmail-name"
+                placeholder="Введите почту"
+                class="standart-input"
+              />
+              <span class="at-symbol">@</span>
+
+              <div class="custom-select" id="custom-select">
+                <div class="select-selected">gmail.com</div>
+                <div class="select-items select-hide">
+                  <div>gmail.com</div>
+                  <div>mail.ru</div>
+                  <div>yandex.ru</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label>Телефон</label>
+            <input
+              type="tel"
+              placeholder="+7 (___) ___-__-__"
+              id="number"
+              class="standart-input"
+            />
+          </div>
+
+          <div class="form-buttons">
+            <button type="submit" class="btn-primary" id="save-data">
+              Сохранить данные
+            </button>
+            <button type="button" class="btn-secondary" id="exit-button">
+              Выйти из системы
+            </button>
+          </div>
+        </form>
+      </main>
+    </div>
+    <script src="../js/config.js"></script>
+    <script src="../js/modalWindow.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async function () {
+        const profileLink = document.getElementById("profile-circle");
+        const profileImg = profileLink.querySelector("img");
+        const name = document.getElementById("name");
+        const gmail = document.getElementById("gmail-name");
+        const surname = document.getElementById("surname");
+        const number = document.getElementById("number");
+        const inputs = document.querySelectorAll(".standart-input");
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+        const token = localStorage.getItem("token");
+
+        try {
+          if (isLoggedIn === "true") {
+            const response = await fetch("/api/profile", {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+            const userData = await response.json();
+
+            name.value = userData.name || "";
+            surname.value = userData.surname || "";
+            number.value = userData.number || "";
+            profileImg.src = `${API_URL}/uploads/` + userData.photo;
+
+            gmail.value = userData.gmail;
+            document.querySelector(".select-selected").textContent =
+              userData.domen;
+
+            const allFilled = Array.from(inputs).every(
+              (input) => input.value.trim() !== "",
+            );
+
+            if (allFilled) {
+              inputs.forEach((input) => (input.disabled = true));
+              const customSelect = document.querySelector(".custom-select");
+              customSelect.style.pointerEvents = "none";
+              customSelect.style.opacity = "0.7";
+              document.getElementById("save-data").textContent =
+                "Изменить данные";
+            }
+          } else {
+            profileImg.src = `${API_URL}/uploads/default_avatar.png`;
+          }
+        } catch (error) {
+          console.error("Ошибка:", error);
+        }
+      });
+
+      const saveData = document.getElementById("save-data");
+      let oldData = {};
+
+      saveData.addEventListener("click", async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById("name");
+        const gmail = document.getElementById("gmail-name");
+        const surname = document.getElementById("surname");
+        const number = document.getElementById("number");
+        const selectSelected = document.querySelector(".select-selected");
+        const inputs = document.querySelectorAll(".standart-input");
+
+        if (saveData.textContent === "Изменить данные") {
+          oldData = {
+            name: document.getElementById("name").value,
+            gmail: document.getElementById("gmail-name").value,
+            surname: document.getElementById("surname").value,
+            number: document.getElementById("number").value,
+            selectSelected:
+              document.querySelector(".select-selected").textContent,
+          };
+          inputs.forEach((input) => (input.disabled = false));
+          const customSelect = document.querySelector(".custom-select");
+          customSelect.style.pointerEvents = "auto";
+          customSelect.style.opacity = "1";
+          saveData.textContent = "Сохранить данные";
+        } else {
+          const newData = {
+            name: name.value,
+            gmail: gmail.value,
+            surname: surname.value,
+            number: number.value,
+            selectSelected: selectSelected.textContent,
+          };
+
+          const hasChanged =
+            JSON.stringify(oldData) !== JSON.stringify(newData);
+
+          const token = localStorage.getItem("token");
+          if (hasChanged) {
+            const response = await fetch("/api/saveData", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify(newData),
+            });
+            const result = await response.json();
+
+            console.log(result.message);
+          } else {
+            console.log("Данные не менялись");
+          }
+          const allFilled = Array.from(inputs).every(
+            (input) => input.value.trim() !== "",
+          );
+
+          if (allFilled) {
+            inputs.forEach((input) => (input.disabled = true));
+            const customSelect = document.querySelector(".custom-select");
+            customSelect.style.pointerEvents = "none";
+            customSelect.style.opacity = "0.7";
+            document.getElementById("save-data").textContent =
+              "Изменить данные";
+          }
+        }
+      });
+
+      document.getElementById("exit-button").addEventListener("click", (e) => {
+        e.preventDefault();
+
+        localStorage.setItem("isLoggedIn", "false");
+        localStorage.removeItem("token");
+
+        window.location.href = "/index/index.html";
+      });
+
+      const fileInput = document.getElementById("avatar-upload");
+      const addPhotoBtn = document.getElementById("add-photo");
+
+      addPhotoBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", async function (event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        console.log("Файл выбран, начинаем загрузку...", file.name);
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          document.getElementById("preview").src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+
+        // Сама отправка
+        const formData = new FormData();
+        formData.append("photo", file);
+
+        const token = localStorage.getItem("token");
+
+        try {
+          const response = await fetch("/api/photoLoad", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            console.log("Сервер принял файл");
+          } else {
+            showToast("Ошибка: " + result.message);
+          }
+        } catch (error) {
+          console.error("Ошибка сети или fetch:", error.message);
+        } finally {
+          fileInput.value = "";
+        }
+      });
+
+      const customSelect = document.getElementById("custom-select");
+      const selectedText = customSelect.querySelector(".select-selected");
+      const itemsList = customSelect.querySelector(".select-items");
+
+      selectedText.addEventListener("click", (e) => {
+        e.stopPropagation();
+        itemsList.classList.toggle("select-hide");
+      });
+
+      itemsList.addEventListener("click", (e) => {
+        if (e.target.tagName === "DIV") {
+          selectedText.textContent = e.target.textContent;
+          itemsList.classList.add("select-hide");
+        }
+      });
+
+      document.addEventListener("click", () => {
+        itemsList.classList.add("select-hide");
+      });
+    </script>
+  </body>
+</html>

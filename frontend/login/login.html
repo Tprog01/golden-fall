@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Авторизация</title>
+    <link rel="stylesheet" href="login.css" />
+    <link rel="icon" href="../images/favicon.png" />
+  </head>
+
+  <body>
+    <form id="auth-form" action="/login" method="POST">
+      <h2 class="form-title">Авторизация</h2>
+      <div class="input-group">
+        <label for="login">Логин/имя</label>
+        <input
+          type="text"
+          id="login"
+          name="login"
+          title=""
+          autocomplete="username"
+          required
+        />
+      </div>
+      <div class="input-group">
+        <label for="password">Пароль</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          title=""
+          autocomplete="current-password"
+          required
+        />
+      </div>
+      <div class="button-group">
+        <button type="submit" class="btn-main">Войти</button>
+        <a href="../registration/registration.html"
+          ><button type="button" class="btn-secondary">Регистрация</button></a
+        >
+      </div>
+    </form>
+    <script src="../js/config.js"></script>
+    <script src="login.js"></script>
+    <script src="../js/modalWindow.js"></script>
+  </body>
+</html>
