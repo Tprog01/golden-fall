@@ -207,6 +207,12 @@ app.post("/api/login", async (req, res) => {
         .json({ message: "Некорректное количество символов в логине" });
     }
 
+    if (!db) {
+      res
+        .status(400)
+        .json({ message: "Не удалось установить соединение с базой данных" });
+    }
+
     const [rows] = await db.query(
       "SELECT id, password_hash FROM users WHERE login = ? OR username = ?",
       [cleanLogin, cleanLogin],
