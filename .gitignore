@@ -1,11 +1,12 @@
-# Зависимости (самые тяжелые папки, их нельзя пушить)
+# Зависимости
 node_modules/
 backend/db/node_modules/
 backend/server/node_modules/
 
-# Конфиденциальные данные (ключи, пароли, настройки БД)
+# Конфиденциальные данные (пароли и настройки)
 .env
 backend/server/.env
+.vscode/
 
 # Логи и временные файлы
 npm-debug.log*
@@ -13,13 +14,7 @@ yarn-debug.log*
 yarn-error.log*
 .DS_Store
 
-backend/server/images/uploads/*
-!backend/server/images/uploads/.gitkeep
-!backend/server/images/uploads/default_avatar.png
-!backend/server/images/uploads/1777038022644-885676557.gif
-!backend/server/images/uploads/productsPhotos/default_product.png
-
-
+# Специфичные файлы БД и сертификаты
 *.sql
 *.pem
 *.session
