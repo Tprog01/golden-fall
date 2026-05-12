@@ -215,7 +215,6 @@
         let number = parseFloat(quantityInput.value.replace(",", ".")); // Берем .value
 
         if (number > step) {
-          // Уменьшаем, если текущее число больше шага
           const orderButton = document.querySelector(".order-btn");
           if (orderButton) {
             orderButton.disabled = true;
@@ -224,7 +223,7 @@
           }
 
           number = parseFloat((number - step).toFixed(2));
-          quantityInput.value = number; // Записываем обратно в .value
+          quantityInput.value = number;
 
           const item = cartData.find((p) => p.products_id === itemId);
           if (item) {
@@ -275,26 +274,72 @@
 
         if (isNaN(val)) {
           showToast("Пожалуйста, введите число");
-          document.getElementById(`qty-${itemId}`).value =
-            unit === "шт." ? 1 : "1.00";
-          return;
+          val = unit === "шт." ? 1 : "0.05";
+
+          const itemInArray = cartData.find(
+            (item) => item.products_id === itemId,
+          );
+          if (itemInArray) {
+            itemInArray.quantity = unit === "шт." ? 1 : "0.05";
+          }
+
+          updateTotalUI(cartData);
         }
 
         if (unit === "шт.") {
           val = Math.floor(val);
+
+          const itemInArray = cartData.find(
+            (item) => item.products_id === itemId,
+          );
+          if (itemInArray) {
+            itemInArray.quantity = val;
+          }
+
+          updateTotalUI(cartData);
         }
+
         if (val > stock) {
           showToast(`На складе доступно: ${stock}`);
           val = stock;
+
+          const itemInArray = cartData.find(
+            (item) => item.products_id === itemId,
+          );
+          if (itemInArray) {
+            itemInArray.quantity = val;
+          }
+
+          updateTotalUI(cartData);
         }
+
         if (val <= 0) {
-          val = unit === "шт." ? 1 : 0.1;
+          val = unit === "шт." ? 1 : 0.05;
+
+          const itemInArray = cartData.find(
+            (item) => item.products_id === itemId,
+          );
+          if (itemInArray) {
+            itemInArray.quantity = val;
+          }
+
+          updateTotalUI(cartData);
         }
 
         const formattedVal = unit === "шт." ? val : parseFloat(val.toFixed(2));
+
+        const itemInArray = cartData.find(
+          (item) => item.products_id === itemId,
+        );
+        if (itemInArray) {
+          itemInArray.quantity = formattedVal;
+        }
+
         document.getElementById(`qty-${itemId}`).value =
           unit === "шт." ? formattedVal : formattedVal.toFixed(2);
         sendQuantityToServer(itemId, Number.parseFloat(formattedVal));
+
+        updateTotalUI(cartData);
       }
 
       async function sendQuantityToServer(itemId, number) {

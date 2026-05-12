@@ -477,9 +477,10 @@ app.post("/api/addToCart", async (req, res) => {
       return res.status(400).json({ message: "Больше товара нет в наличии" });
     }
     if (currentQuantity > 0) {
+      const SUM = Math.round((currentQuantity + addQuantity) * 100) / 100;
       const [cartRows] = await db.query(
-        "UPDATE cart SET quantity = quantity + ? WHERE user_id = ? AND product_id = ? ",
-        [addQuantity, decoded.id, productId],
+        "UPDATE cart SET quantity = ? WHERE user_id = ? AND product_id = ? ",
+        [SUM, decoded.id, productId],
       );
 
       if (cartRows.affectedRows === 0) {
@@ -890,7 +891,7 @@ app.get("/api/getFavorite", async (req, res) => {
     );
 
     if (rows.length === 0) {
-      return res.status(404).json({ message: "Товары не найдены" });
+      return res.status(200).json({ message: "Товары не найдены" });
     }
 
     return res.status(200).json(rows);

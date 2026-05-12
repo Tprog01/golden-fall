@@ -490,6 +490,11 @@
 
           container.innerHTML = "";
 
+          if (products.message === "Товары не найдены") {
+            container.innerHTML = `<p style="color: white; font-size: 18px;">Самое время добавить свои любимые товары!</p>`;
+            return;
+          }
+
           if (!products || products.length === 0) {
             container.innerHTML = `<p style="color: white;">Тут ничего нет :(</p>`;
             return;
