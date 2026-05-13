@@ -140,7 +140,7 @@ body {
 }
 
 /* 1. Настройка строки почты */
-.gmail-row {
+.email-row {
   display: flex; /* Включаем гибкий ряд */
   align-items: center; /* Центрируем по вертикали */
   border: 1px solid #ddd;
@@ -151,7 +151,7 @@ body {
 }
 
 /* 2. Настройка инпута внутри строки */
-#gmail-name {
+#email-name {
   flex: 1; /* Растягивается на все свободное место */
   border: none !important; /* Убираем рамку самого инпута */
   outline: none;
@@ -282,12 +282,12 @@ body {
   }
 
   /* Почта: делаем перенос, если не влезает */
-  .gmail-row {
+  .email-row {
     flex-wrap: wrap;
     gap: 10px;
   }
 
-  #gmail-name {
+  #email-name {
     flex: 1;
     min-width: 150px;
   }

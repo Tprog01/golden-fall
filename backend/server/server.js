@@ -40,21 +40,36 @@ const limiter = rateLimit({
   },
 });
 
+const likeLimiter = rateLimit({
+  windowMs: 1 * 1000,
+  max: 3,
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: (req, res) => {
+    res.status(429).json({
+      message: "Перестаньте спамить кнопку лайка!",
+    });
+  },
+});
+
 async function uploadToImgBB(fileBuffer) {
-  const apiKey = "ВАШ_КЛЮЧ";
+  const apiKey = "8226cf42db10cc5692d1a3cd5c3c2821";
 
   const compressedBuffer = await sharp(fileBuffer)
     .resize(800)
     .webp({ quality: 80 })
-    .toBuffer()
     .toBuffer();
 
   const form = new FormData();
   form.append("image", compressedBuffer.toString("base64"));
 
-  const response = await axios.post(`https://imgbb.com{apiKey}`, form, {
-    headers: form.getHeaders(),
-  });
+  const response = await axios.post(
+    `https://api.imgbb.com/1/upload?key=${apiKey}`,
+    form,
+    {
+      headers: form.getHeaders(),
+    },
+  );
   return response.data.data.url;
 }
 
@@ -289,27 +304,27 @@ app.get("/api/profile", async (req, res) => {
     const decoded = jwt.verify(token, JWT_SECRET);
 
     const [rows] = await db.query(
-      "SELECT photo, username,surname, gmail, number FROM users WHERE id = ?",
+      "SELECT photo, username,surname, email, number FROM users WHERE id = ?",
       [decoded.id],
     );
     if (!rows || rows.length === 0) {
       return res.status(404).json({ message: "Пользователь не найден" });
     }
 
-    const { photo, username, surname, number, gmail: fullGmail } = rows[0];
+    const { photo, username, surname, number, email: fullEmail } = rows[0];
 
-    let gmail = "";
-    let domen = "gmail.com";
-    if (fullGmail && fullGmail.includes("@")) {
-      const parts = fullGmail.split("@");
-      gmail = parts[0];
+    let email = "";
+    let domen = "email.com";
+    if (fullEmail && fullEmail.includes("@")) {
+      const parts = fullEmail.split("@");
+      email = parts[0];
       domen = parts[1];
     }
     return res.status(200).json({
       photo,
       name: username,
       surname,
-      gmail,
+      email,
       domen,
       number,
     });
@@ -375,20 +390,10 @@ app.post("/api/saveData", async (req, res) => {
       return res.status(400).json({ message: "Данные не переданы" });
     }
 
-    const { name, surname, gmail, number, selectSelected } = req.body;
+    const { name, surname, email, number, selectSelected } = req.body;
     const authorization = req.headers["authorization"];
     if (!authorization) {
       return res.status(401).json({ message: "Нет токена" });
-    }
-
-    if (
-      typeof name !== "string" ||
-      typeof surname !== "string" ||
-      typeof number !== "string" ||
-      typeof gmail !== "string" ||
-      typeof selectSelected !== "string"
-    ) {
-      return res.status(400).json({ message: "Некорректный формат данных" });
     }
 
     const token = authorization.split(" ")[1];
@@ -397,18 +402,46 @@ app.post("/api/saveData", async (req, res) => {
       return res.status(401).json({ message: "Токен отсутствует" });
     }
 
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const cleanName = typeof name === "string" ? name.trim() : "";
+    const cleanSurname = typeof surname === "string" ? surname.trim() : "";
+    const cleanEmail =
+      typeof email === "string" ? email?.trim().split("@")[0] : "";
+    const cleanSelectSelected =
+      typeof selectSelected === "string" ? selectSelected.trim() : "";
+    const fullEmail = `${cleanEmail}@${cleanSelectSelected}`;
+    const cleanNumber = typeof number === "string" ? number : "";
 
-    const cleanName = name.trim();
-    const cleanGmail = gmail.trim().split("@")[0]; // Берем только часть до @, на случай ошибки
-    const fullEmail = `${cleanGmail}@${selectSelected.trim()}`;
+    const firstNumberOfNumber =
+      number[0] === "+" ? number.replace(/\D/g, "")[0] : 7;
+
+    if (
+      !cleanName ||
+      !cleanSurname ||
+      !cleanEmail ||
+      !cleanSelectSelected ||
+      !cleanNumber
+    ) {
+      return res.status(400).json({
+        message: "Некорректный формат данных или заполнены не все поля",
+      });
+    }
+
+    const cleanNumberDigits = cleanNumber.replace(/\D/g, "");
+
+    if (cleanNumberDigits.length !== 11) {
+      return res
+        .status(400)
+        .json({ message: "Номер телефона должен содержать 11 цифр" });
+    }
+
+    const decoded = jwt.verify(token, JWT_SECRET);
 
     if (cleanName.length < 2) {
       return res.status(400).json({ message: "Имя слишком короткое" });
     }
 
     const [rows] = await db.query(
-      "UPDATE users SET username = ?, surname = ?, number = ?, gmail = ? WHERE id = ?",
+      "UPDATE users SET username = ?, surname = ?, number = ?, email = ? WHERE id = ?",
       [cleanName, surname?.trim(), number?.trim(), fullEmail, decoded.id],
     );
 
