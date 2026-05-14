@@ -564,6 +564,8 @@
         }
       });
 
+      let timer = 0;
+
       document.addEventListener("click", async (e) => {
         const btn = e.target.closest(".wishlist-btn");
         if (!btn) return;
@@ -583,38 +585,35 @@
           return;
         }
 
+        btn.classList.toggle("active");
+
+        btn.classList.add("pulse");
+
+        setTimeout(() => {
+          btn.classList.remove("pulse");
+        }, 400);
+
+        btn.blur();
+
         const productId = btn.dataset.id;
         try {
-          const response = await fetch(`${API_URL}/api/setFavorite`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ productId }),
-          });
+          clearTimeout(timer);
+          timer = setTimeout(async () => {
+            const response = await fetch(`${API_URL}/api/setFavorite`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({ productId }),
+            });
 
-          const result = await response.json();
+            if (!response.ok) throw new Error("Ошибка сервера");
+          }, 400);
 
-          if (response.ok) {
-            if (result.isFavorite) {
-              btn.classList.add("active");
-            } else {
-              btn.classList.remove("active");
-            }
-
-            btn.classList.add("pulse");
-
-            setTimeout(() => {
-              btn.classList.remove("pulse");
-            }, 400);
-
-            btn.blur();
-          } else {
-            showToast(result.message);
-          }
-        } catch (err) {
-          console.error("Ошибка сети:", err);
+          // const result = await response.json();
+        } catch {
+          console.error("Ошибка сети");
         }
       });
     </script>
